@@ -1,0 +1,14 @@
+{
+  "name": "claimly-discord-bot",
+  "version": "2.0.0",
+  "description": "Claimly — first-come-first-served Claimly bot",
+  "main": "index.js",
+  "scripts": {
+    "deploy": "node deploy-commands.js",
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.27.0",
+    "dotenv": "^17.2.2"
+  }
+}
