@@ -88,7 +88,7 @@ client.on("interactionCreate", async interaction => {
 
       // --- CLAIMED Card ---
       const embed = new EmbedBuilder()
-        .setColor("#e74c3c")
+        .setColor("#000acd")
         .setTitle(data.clientName)
         .addFields(
           { name: "Taken by", value: `${claimedBy}`, inline: false },
@@ -123,3 +123,17 @@ client.on("interactionCreate", async interaction => {
 });
 
 client.login(process.env.BOT_TOKEN);
+
+// --- ITO LANG ANG BAGONG DAGDAG ---
+const express = require("express");
+const app = express();
+const PORT = process.env.PORT || 8080;
+
+app.get("/", (req, res) => {
+  res.send("Bot is running!");
+});
+
+app.listen(PORT, () => {
+  console.log(`✅ Health check port: ${PORT}`);
+});
+// --- HANGGANG DITO ---
