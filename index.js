@@ -6,25 +6,23 @@ const {
   ButtonStyle,
   EmbedBuilder
 } = require("discord.js");
-require("dotenv").config();
 
-// ——— Anti-tulog / Health Check ———
+// Diretsong ilagay muna dito para masigurado — ito lang pansamantala
+const BOT_TOKEN = "MTU1NjY3OTczODQxMDY3MjI0OA.GvoGOd.FW2YVs8ms-07FVGvgu5GnNFEIt11jVbCIkVYDE";
+const EDITORS_ROLE_ID = "1541429030165684344";
+
 const express = require("express");
 const app = express();
-const PORT = process.env.PORT || 8080;
+const PORT = 8080;
 
 app.get("/", (req, res) => {
   res.send("Claimly Bot is running! ✅");
 });
 
 app.listen(PORT, () => {
-  console.log(`✅ Health check port: ${PORT}`);
-  console.log(`✅ Token exists: ${!!process.env.BOT_TOKEN}`);
-  console.log(`✅ Editors Role ID: ${process.env.EDITORS_ROLE_ID}`);
+  console.log(`✅ Port: ${PORT}`);
+  console.log(`✅ Token exists: ${!!BOT_TOKEN}`);
 });
-
-// ——— Bot Setup ———
-const EDITORS_ROLE_ID = process.env.EDITORS_ROLE_ID;
 
 const client = new Client({
   intents: [
@@ -44,7 +42,6 @@ client.on("error", (err) => {
 
 const pendingClaims = new Map();
 
-// ——— Slash Command ———
 client.on("interactionCreate", async interaction => {
   try {
     if (interaction.isChatInputCommand()) {
@@ -87,7 +84,6 @@ client.on("interactionCreate", async interaction => {
       }
     }
 
-    // ——— Claim Button ———
     if (interaction.isButton()) {
       const customId = interaction.customId;
       if (customId.startsWith("claim:")) {
@@ -95,10 +91,7 @@ client.on("interactionCreate", async interaction => {
         const data = pendingClaims.get(messageId);
 
         if (!data) {
-          return await interaction.reply({
-            content: "❌ Hindi na mahanap ang impormasyon.",
-            ephemeral: true
-          });
+          return interaction.reply({ content: "❌ Hindi na mahanap.", ephemeral: true });
         }
 
         const claimedBy = interaction.user;
@@ -136,12 +129,8 @@ client.on("interactionCreate", async interaction => {
       }
     }
   } catch (err) {
-    console.error("❌ Interaction Error:", err);
-    if (!interaction.replied && !interaction.deferred) {
-      await interaction.deferReply({ ephemeral: true }).catch(() => {});
-    }
+    console.error("❌ Error:", err);
   }
 });
 
-// ——— Login ———
-client.login(process.env.BOT_TOKEN);
+client.login(BOT_TOKEN);
