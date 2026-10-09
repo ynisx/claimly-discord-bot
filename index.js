@@ -1,19 +1,3 @@
-require("dotenv").config();
-
-const express = require("express");
-const app = express();
-const PORT = process.env.PORT || 8080;
-
-app.get("/", (req, res) => {
-  res.send("OK");
-});
-
-app.listen(PORT, () => {
-  console.log(`✅ Port: ${PORT}`);
-  console.log(`✅ Token exists: ${!!process.env.BOT_TOKEN}`);
-  console.log(`✅ Editors Role: ${process.env.EDITORS_ROLE_ID}`);
-});
-
 const {
   Client,
   GatewayIntentBits,
@@ -24,7 +8,7 @@ const {
 } = require("discord.js");
 require("dotenv").config();
 
-// Health check para hindi matulog
+// ——— Anti-tulog / Health Check ———
 const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -35,8 +19,11 @@ app.get("/", (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`✅ Health check port: ${PORT}`);
+  console.log(`✅ Token exists: ${!!process.env.BOT_TOKEN}`);
+  console.log(`✅ Editors Role ID: ${process.env.EDITORS_ROLE_ID}`);
 });
 
+// ——— Bot Setup ———
 const EDITORS_ROLE_ID = process.env.EDITORS_ROLE_ID;
 
 const client = new Client({
@@ -51,22 +38,13 @@ client.on("ready", () => {
   console.log(`✅ Naka-log in bilang ${client.user.tag}`);
 });
 
-// --- Auto-reconnect kapag naputol ---
-client.on("disconnect", () => {
-  console.log("🔌 Naputol — muling kumokonekta...");
+client.on("error", (err) => {
+  console.error("❌ Bot Error:", err);
 });
-
-client.on("error", (error) => {
-  console.error("❌ Bot Error:", error);
-});
-
-client.on("reconnecting", () => {
-  console.log("🔄 Muling kumokonekta...");
-});
-// --- Hanggang dito ---
 
 const pendingClaims = new Map();
 
+// ——— Slash Command ———
 client.on("interactionCreate", async interaction => {
   try {
     if (interaction.isChatInputCommand()) {
@@ -109,6 +87,7 @@ client.on("interactionCreate", async interaction => {
       }
     }
 
+    // ——— Claim Button ———
     if (interaction.isButton()) {
       const customId = interaction.customId;
       if (customId.startsWith("claim:")) {
@@ -164,4 +143,5 @@ client.on("interactionCreate", async interaction => {
   }
 });
 
+// ——— Login ———
 client.login(process.env.BOT_TOKEN);
