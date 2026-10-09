@@ -1,3 +1,19 @@
+require("dotenv").config();
+
+const express = require("express");
+const app = express();
+const PORT = process.env.PORT || 8080;
+
+app.get("/", (req, res) => {
+  res.send("OK");
+});
+
+app.listen(PORT, () => {
+  console.log(`✅ Port: ${PORT}`);
+  console.log(`✅ Token exists: ${!!process.env.BOT_TOKEN}`);
+  console.log(`✅ Editors Role: ${process.env.EDITORS_ROLE_ID}`);
+});
+
 const {
   Client,
   GatewayIntentBits,
